@@ -396,16 +396,11 @@ Item {
     }
 
     function isAllDayEvent(event) {
-        var dur = event.end - event.start
-        var start = new Date(event.start * 1000), end = new Date(event.end * 1000)
-        var startsMidnight = start.getHours() === 0 && start.getMinutes() === 0 && start.getSeconds() === 0
-        var endsMidnight = end.getHours()   === 0 && end.getMinutes() === 0 && end.getSeconds() === 0
-        if (startsMidnight && endsMidnight) {
-            var sUtc = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())
-            var eUtc = Date.UTC(end.getFullYear(),   end.getMonth(),   end.getDate())
-            if (eUtc > sUtc) return true
-        }
-        return dur >= 86400
+        const start = new Date(event.start * 1000);
+        if (event.start === event.end) return true;
+        const isAtMidnight = start.getHours() === 0 && start.getMinutes() === 0 && start.getSeconds() === 0;
+        const duration = event.end - event.start;
+        return isAtMidnight && duration >= 23 * 3600;
     }
 
     function isMultiDayEvent(event) {
